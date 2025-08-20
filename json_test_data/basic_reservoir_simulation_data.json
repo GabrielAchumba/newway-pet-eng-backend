@@ -1,0 +1,59 @@
+{
+    "nx": 10,
+    "ny": 10,
+    "nz": 3,
+    "porosity": 0.2,
+    "permeabilityX": 1000,
+    "permeabilityY": 1000, 
+    "permeabilityZ": 100, 
+    "dx": 1000,
+    "dy": 1000, 
+    "dz": 100,
+    "oilViscosity": 62, 
+    "waterViscosity": 42, 
+    "gasViscosity": 0.02,
+    "oilFVF": 1.12, 
+    "waterFVF": 1.0, 
+    "gasFVF": 0.002,
+    "pressureOil": 4000, 
+    "pressureWater": 4000, 
+    "pressureGas": 4000, 
+    "saturationOil": 0.95, 
+    "saturationWater": 0.05, 
+    "saturationGas": 0,
+    "MAX_TIME_STEPS": 100,
+    "timeStep": 10,
+    "wells": [
+        {
+            "perforationPositions": [
+                {
+                    "i": 5,
+                    "j": 5,
+                    "k": 1
+                }
+            ],
+            "bottomHolePressure": 2500,
+            "wellType": 1,
+            "wellControlType": 0,
+            "wellboreRadius": 0.5
+        }, 
+        {
+            "perforationPositions": [
+                {
+                    "i": 1,
+                    "j": 1,
+                    "k": 3
+                }
+            ],
+            "bottomHolePressure": 6000,
+            "wellType": 3,
+            "wellControlType": 0,
+            "wellboreRadius": 0.5
+        }
+    ],
+    "bottomBoundaryPressure": 0,
+    "westBoundaryPressure": 0,
+    "eastBoundaryPressure": 0,
+    "southBoundaryPressure": 0,
+    "northBoundaryPressure": 0
+}

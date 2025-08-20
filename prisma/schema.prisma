@@ -1,0 +1,157 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Production {
+  id  Int       @id @default(autoincrement())
+  DrainagePointId Int
+  AssetGroupId Int
+  Lease String
+  FacilityName String
+  Field String
+  Reservoir String
+  TubingString String
+  DrainagePoint String
+  Date2 String
+  SplitFactor Float
+  OilProduced Float
+  GasProduced Float
+  WaterProduced Float
+  GasInjected Float
+  WaterInjected Float
+  LiquidProduced Float
+
+  OilProdDaysRate Float
+  GasProdDaysRate Float
+  WaterProdDaysRate Float
+  LiquidProdDaysRate Float
+  GasInjectionProdDaysRate Float
+  WaterInjectionProdDaysRate Float
+
+  OilCalendarDaysRate Float
+  GasCalendarDaysRate Float
+  WaterCalendarDaysRate Float
+  LiquidCalendarDaysRate Float
+  GasInjectionCalendarDaysRate Float
+  WaterInjectionCalendarDaysRate Float
+
+  ProdHours Float
+  ProdDays Float
+  DefermentFactor Float
+  CumulativeOilProduced Float
+  CumulativeGasProduced Float
+  CumulativeWaterProduced Float
+  CumulativeWaterInjected Float
+  CumulativeGasInjected Float
+  CumulativeLiquidProduced Float
+  UltimateRecovery Float
+
+  WaterCut Float
+  ProdGOR Float
+  WaterGasRatio Float
+  CondensateGasRatio Float
+  ProdTHP Float
+  ProdBean Float
+  ProdSand Float
+  ReservoirPressure Float
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model  WellTest {
+  id        Int       @id @default(autoincrement())
+  DrainagePointId Int
+  AssetGroupId Int
+  Lease String
+  FacilityName String
+  Field String
+  Reservoir String
+  TubingString String
+  DrainagePoint String
+  Facility String
+  Date1 DateTime
+  ChokeSize Float
+  THPNew Float
+  WellHeadTemperature Float
+  FlowLineTemperature Float
+  FlowLinePressure Float
+  ManifoldPressure Float
+  SeparatorPressure Float
+  SeparatorTemperature Float
+  CasingHeadPressure Float
+
+  LiquidNew Float
+  GasNew Float
+  OilNew Float
+  WaterNew Float
+  WaterCut Float
+  ProdGOR Float
+  CondensateGasRatio Float
+  WaterGasRatio Float
+  DailyLiquidVolume Float
+  ProdDays Float
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model DrainagePoint {
+  id        Int       @id @default(autoincrement())
+  AssetGroupId Int
+  ReservoirId Int
+  name      String   @unique
+  description     String   
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Facility {
+  id        Int       @id @default(autoincrement())
+  name      String   @unique
+  AssetGroupId Int
+  description     String   
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Field {
+  id        Int       @id @default(autoincrement())
+  name      String   @unique
+  AssetGroupId Int
+  description     String   
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Reservoir {
+  id        Int       @id @default(autoincrement())
+  name      String   @unique
+  AssetGroupId Int
+  FieldId Int
+  description     String   
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Well {
+  id        Int       @id @default(autoincrement())
+  name      String   @unique
+  AssetGroupId Int
+  FieldId Int
+  description     String   
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model AssetGroup {
+  id        Int       @id @default(autoincrement())
+  name      String   @unique
+  description     String   
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+

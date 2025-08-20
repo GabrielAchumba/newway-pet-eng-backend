@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NestJS Prisma Setup Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #1a1a1a;
+            color: #e1e1e1;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #ea94d8;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            color: #7ec696;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #3a3a3a;
+        }
+        
+        h3 {
+            color: #5d9cec;
+            margin: 20px 0 10px;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .card {
+            background-color: #2d2d2d;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .error-card {
+            grid-column: 1 / -1;
+            background-color: #4a2d2d;
+            border-left: 5px solid #ff6b6b;
+        }
+        
+        .solution-card {
+            grid-column: 1 / -1;
+            background-color: #2d4a2d;
+            border-left: 5px solid #7ec696;
+        }
+        
+        pre {
+            background-color: #1e1e1e;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border-left: 4px solid #5d9cec;
+        }
+        
+        code {
+            color: #e6e6e6;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .command {
+            color: #7ec696;
+        }
+        
+        .comment {
+            color: #6a9955;
+        }
+        
+        .property {
+            color: #9cdcfe;
+        }
+        
+        .value {
+            color: #ce9178;
+        }
+        
+        .important {
+            color: #ea94d8;
+            font-weight: bold;
+        }
+        
+        .step {
+            background-color: #3a3a3a;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background-color: #5d9cec;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>NestJS Prisma Setup Guide</h1>
+        <p>Resolving the "CustomerCreateInput" Error and Proper Prisma Configuration</p>
+    </header>
+    
+    <div class="container">
+        <div class="card">
+            <h2>Correct Prisma Setup for NestJS</h2>
+            <p>The error occurs because you're trying to install <code>@nestjs/prisma</code> which doesn't exist. Here's the correct setup:</p>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <span>Install the correct packages:</span>
+            </div>
+            <pre><code><span class="command">npm install</span> @nestjs/config prisma @prisma/client</code></pre>
+            
+            <div class="step">
+                <span class="step-number">2</span>
+                <span>Initialize Prisma:</span>
+            </div>
+            <pre><code><span class="command">npx</span> prisma init</code></pre>
+            
+            <div class="step">
+                <span class="step-number">3</span>
+                <span>Configure your database connection in <span class="important">.env</span>:</span>
+            </div>
+            <pre><code><span class="property">DATABASE_URL</span>=<span class="value">"mysql://USER:PASSWORD@HOST:PORT/DATABASE"</span></code></pre>
+        </div>
+        
+        <div class="card">
+            <h2>Creating a Prisma Service</h2>
+            <p>Create a Prisma service to handle database connections:</p>
+            
+            <pre><code><span class="comment">// prisma.service.ts</span>
+<span class="command">import</span> { Injectable, OnModuleInit, OnModuleDestroy } <span class="command">from</span> <span class="value">'@nestjs/common'</span>;
+<span class="command">import</span> { PrismaClient } <span class="command">from</span> <span class="value">'@prisma/client'</span>;
+
+<span class="command">@Injectable</span>()
+<span class="command">export</span> <span class="value">class</span> PrismaService <span class="command">extends</span> PrismaClient
+  <span class="command">implements</span> OnModuleInit, OnModuleDestroy {
+  
+  <span class="command">async</span> onModuleInit() {
+    <span class="command">await</span> <span class="command">this</span>.$connect();
+  }
+  
+  <span class="command">async</span> onModuleDestroy() {
+    <span class="command">await</span> <span class="command">this</span>.$disconnect();
+  }
+}</code></pre>
+            
+            <p>Create a module to export the service:</p>
+            
+            <pre><code><span class="comment">// prisma.module.ts</span>
+<span class="command">import</span> { Module } <span class="command">from</span> <span class="value">'@nestjs/common'</span>;
+<span class="command">import</span> { PrismaService } <span class="command">from</span> <span class="value">'./prisma.service'</span>;
+
+<span class="command">@Module</span>({
+  providers: [PrismaService],
+  exports: [PrismaService],
+})
+<span class="command">export</span> <span class="value">class</span> PrismaModule {}</code></pre>
+        </div>
+        
+        <div class="error-card">
+            <h2>Understanding the Error</h2>
+            <p>The error message:</p>
+            <pre><code>Namespace '"c:/Users/.../node_modules/.prisma/client/default".Prisma' 
+has no exported member 'CustomerCreateInput'</code></pre>
+            
+            <p>This typically happens when:</p>
+            <ul>
+                <li>Your Prisma Client is out of sync with your schema</li>
+                <li>You haven't generated the Prisma Client after schema changes</li>
+                <li>There's an issue with your Prisma schema definition</li>
+            </ul>
+        </div>
+        
+        <div class="solution-card">
+            <h2>Resolving the CustomerCreateInput Error</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <span>Check your Prisma schema for the Customer model:</span>
+            </div>
+            <pre><code><span class="comment">// schema.prisma</span>
+<span class="value">model</span> Customer {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  <span class="comment">// Other fields as needed</span>
+}</code></pre>
+            
+            <div class="step">
+                <span class="step-number">2</span>
+                <span>Regenerate Prisma Client:</span>
+            </div>
+            <pre><code><span class="command">npx</span> prisma generate</code></pre>
+            
+            <div class="step">
+                <span class="step-number">3</span>
+                <span>If using TypeScript, try restarting your IDE to reload types</span>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">4</span>
+                <span>As a last resort, delete node_modules and reinstall:</span>
+            </div>
+            <pre><code><span class="command">rm</span> -rf node_modules
+<span class="command">rm</span> package-lock.json
+<span class="command">npm</span> install
+<span class="command">npx</span> prisma generate</code></pre>
+        </div>
+        
+        <div class="card">
+            <h2>Using Prisma in Your Services</h2>
+            <p>Here's how to use Prisma in a NestJS service:</p>
+            
+            <pre><code><span class="comment">// customers.service.ts</span>
+<span class="command">import</span> { Injectable } <span class="command">from</span> <span class="value">'@nestjs/common'</span>;
+<span class="command">import</span> { PrismaService } <span class="command">from</span> <span class="value">'./prisma.service'</span>;
+
+<span class="command">@Injectable</span>()
+<span class="command">export</span> <span class="value">class</span> CustomersService {
+  <span class="command">constructor</span>(private prisma: PrismaService) {}
+  
+  <span class="command">async</span> createCustomer(data: {
+    email: string;
+    name?: string;
+  }) {
+    <span class="command">return</span> <span class="command">this</span>.prisma.customer.create({
+      data,
+    });
+  }
+  
+  <span class="command">async</span> findCustomerById(id: number) {
+    <span class="command">return</span> <span class="command">this</span>.prisma.customer.findUnique({
+      where: { id },
+    });
+  }
+}</code></pre>
+        </div>
+        
+        <div class="card">
+            <h2>Additional Tips</h2>
+            <ul>
+                <li>Always run <code>npx prisma generate</code> after changing your schema</li>
+                <li>Use Prisma Studio to view your data: <code>npx prisma studio</code></li>
+                <li>Keep your Prisma Client updated to the latest version</li>
+                <li>Consider using Prisma migrations for database schema changes</li>
+            </ul>
+            
+            <h3>Useful Commands</h3>
+            <pre><code><span class="comment"># Generate Prisma Client</span>
+<span class="command">npx</span> prisma generate
+
+<span class="comment"># Create migration</span>
+<span class="command">npx</span> prisma migrate dev --name init
+
+<span class="comment"># Apply migrations</span>
+<span class="command">npx</span> prisma migrate deploy
+
+<span class="comment"># Open Prisma Studio</span>
+<span class="command">npx</span> prisma studio</code></pre>
+        </div>
+    </div>
+    
+    <footer>
+        <p>NestJS Prisma Setup Guide | Created for resolving Common Prisma Issues</p>
+    </footer>
+</body>
+</html>
