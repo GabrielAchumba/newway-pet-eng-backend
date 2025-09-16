@@ -1,9 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import * as bodyParser from 'body-parser';
+
+// … inside bootstrap():
+// Default parsers
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
+
+  app.use(bodyParser.json({ limit: '10mb' }));
+  app.use(bodyParser.urlencoded({ extended: true }));
+
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.enableCors({
     methods: 'GET, HEAD, PUT, POST, DELETE, OPTIONS, PATCH',

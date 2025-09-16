@@ -9,6 +9,7 @@ export class AssetGroupController {
 
   @Post()
   create(@Body() dto: CreateAssetGroupDto) {
+    console.log("dto: ", dto);
     return this.assetGroupService.create(dto);
   }
 

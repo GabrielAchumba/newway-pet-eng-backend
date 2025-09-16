@@ -1,9 +1,18 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <iomanip>
 #include <cmath>
+#include "./src/petroleum_engineering_libs/nlohmann/json.hpp"
+#include "./src/petroleum_engineering_libs/routes/assets/configure_subsurface_assets.h"
 
 using namespace std;
+using json = nlohmann::json;
+
+string baseFilePath = "C:/Users/HP_ELITEBOOK840_G4/Documents/Softwares/NewwayStandardGlobal/newway-pet-eng-backend";
+
+void export_to_file(const json &j, const string &filename);
+void configureSubsurfaceAssets();
 
 const int NX = 10, NY = 10, NZ = 3;
 const double DX = 10.0, DY = 10.0, DZ = 1.0;
@@ -29,6 +38,21 @@ vector<double> pressureGas(NX * NY * NZ, 20e6);
 vector<double> saturationOil(NX * NY * NZ, 0.7);
 vector<double> saturationWater(NX * NY * NZ, 0.2);
 vector<double> saturationGas(NX * NY * NZ, 0.1);
+
+json ReadJsonFile(string jsonFileName)
+{
+    std::ifstream file(jsonFileName);
+    if (!file.is_open())
+    {
+        throw std::runtime_error("Failed to open JSON file");
+    }
+
+    json jsonData;
+    file >> jsonData;
+    file.close();
+
+    return jsonData;
+}
 
 void InitializeReservoir() {
     // Already initialized via constructors above
@@ -97,7 +121,32 @@ void PrintMidpointState(int timeStep) {
          << " | So: " << saturationOil[idx] << endl;
 }
 
-int main() {
+void export_to_file(const json &j, const string &filename)
+{
+    ofstream file(filename);
+    if (file.is_open())
+    {
+        file << j.dump(4); // Pretty print with 4 spaces
+        file.close();
+        cout << "JSON saved to " << filename << endl;
+    }
+    else
+    {
+        cerr << "Unable to open file: " << filename << endl;
+    }
+}
+
+void configureSubsurfaceAssets() {
+
+    string filePath = baseFilePath + "/python/data/assets/subsurface_assets.json";
+    json subSurfaceAssetsJsonData = ReadJsonFile(filePath);
+    ConfigureSubsurfaceAssets configureSubsurfaceAssets;
+    json results = configureSubsurfaceAssets.Configure(subSurfaceAssetsJsonData);
+    string filePath2 = baseFilePath + "/python/data/assets/configured_subsurface_assets.json";
+    export_to_file(results, filePath2);
+}
+
+int main2() {
     InitializeReservoir();
 
     for (int t = 0; t < MAX_TIME_STEPS; ++t) {
@@ -111,3 +160,11 @@ int main() {
     cout << "Simulation complete." << endl;
     return 0;
 }
+
+int main() {
+
+    configureSubsurfaceAssets();
+
+    return 0;
+}
+

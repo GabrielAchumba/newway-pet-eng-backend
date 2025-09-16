@@ -11,7 +11,7 @@
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe",
                 "-I",
-                "C:\\Users\\HP_ELITEBOOK840_G4\\Documents\\Softwares\\Dexa\\DexaBackend\\Services\\Forecast\\node_modules\\node-addon-api",
+                "C:\\Users\\HP_ELITEBOOK840_G4\\Documents\\Softwares\\NewwayStandardGlobal\\newway-pet-eng-backend\\node_modules\\node-addon-api",
                 "-I",
                 "C:\\Users\\HP_ELITEBOOK840_G4\\AppData\\Local\\node-gyp\\Cache\\23.2.0\\include\\node",
                 "-L",

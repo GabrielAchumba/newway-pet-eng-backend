@@ -9,22 +9,30 @@
             "type": "node",
             "request": "launch",
             "name": "NewwayPetEngBackend",
-            "skipFiles": [
-                "<node_internals>/**"
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register",
+                "-r",
+                "tsconfig-paths/register"
             ],
-            "program": "${workspaceFolder}\\src\\main.ts",
-            "preLaunchTask": "tsc: build - tsconfig.json",
-            "outFiles": [
-                "${workspaceFolder}/dist/**/*.js"
-            ]
+            "args": ["${workspaceFolder}/src/main.ts"],
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "TS_NODE_TRANSPILE_ONLY": "true"
+            },
+            "sourceMaps": true,
+            "skipFiles": [
+                "<node_internals>/**", 
+                "node_modules/**"
+            ],
         },
         {
             "type": "cppdbg",
             "name": "Dexa C++ Addon",
             "request": "attach",
-            "program": "${workspaceFolder}/build/Debug/volumeforecast.node", // build\Debug\volumeforecast.node
-            "processId": "${command:PickProcess}", // Select the Node.js process
-            "miDebuggerPath": "C:/msys64/ucrt64/bin/gdb.exe",//"/path/to/gdb", // Adjust for your debugger (e.g., gdb, lldb)
+            "program": "${workspaceFolder}/build/Debug/petroleum_engineering_libs.node",
+            "processId": "${command:PickProcess}",
+            "miDebuggerPath": "C:/msys64/ucrt64/bin/gdb.exe",
             "setupCommands": [
                 { "text": "-enable-pretty-printing", "description": "Enable GDB pretty printing", "ignoreFailures": true }
             ]

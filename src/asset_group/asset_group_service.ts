@@ -5,6 +5,7 @@ import {
 import { CreateAssetGroupDto } from './dto/create-asset-group.dto';
 import { UpdateAssetGroupDto } from './dto/update-asset-group.dto';
 import { DatabaseService } from 'src/database/database.service';
+import { isAnaragram, toKFrequent, groupItemsByRef } from "./job_test";
   
 @Injectable()
 export class AssetGroupService {
@@ -13,7 +14,14 @@ constructor(
 ) {}
 
     create(data: CreateAssetGroupDto) {
-        return this.prisma.assetGroup.create({ data });
+
+        console.log("data: ", data);
+        try {
+            return this.prisma.assetGroup.create({ data });
+        } catch (error) {
+            console.log(error)
+            return error;
+        }
     }
 
     findAll() {
